@@ -8,7 +8,7 @@ RUN pip install python-dotenv
 WORKDIR /migration/
 COPY alembic.ini migration.sh ./
 COPY database ./database
-RUN ./migration.sh
+RUN chmod +x ./migration.sh && ./migration.sh
 
 FROM golang:1.17-alpine as builder
 WORKDIR /app/
