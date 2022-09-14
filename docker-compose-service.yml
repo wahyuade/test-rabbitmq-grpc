@@ -1,0 +1,69 @@
+version: "3.5"
+services:
+  graphql:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      network: "simple_ecommerce_network"
+    image: "simple_ecommerce_cli:1.0"
+    container_name: "simple_ecommerce_graphql"
+    hostname: "graphql"
+    working_dir: /root/
+    command: ["./cli", "graphql"]
+    restart: on-failure
+    ports:
+      - "7000:7000"
+    networks:
+      - simple_ecommerce_network
+  user-svc:
+    image: "simple_ecommerce_cli:1.0"
+    container_name: "simple_ecommerce_user_service"
+    hostname: "user_service"
+    working_dir: /root/
+    stdin_open: true
+    command: ["./cli", "start", "user"]
+    restart: on-failure
+    depends_on:
+      - graphql
+    networks:
+      - simple_ecommerce_network
+  product-svc:
+    image: "simple_ecommerce_cli:1.0"
+    container_name: "simple_ecommerce_product_service"
+    hostname: "product_service"
+    working_dir: /root/
+    stdin_open: true
+    command: ["./cli", "start", "product"]
+    restart: on-failure
+    depends_on:
+      - graphql
+    networks:
+      - simple_ecommerce_network
+  transaction-svc:
+    image: "simple_ecommerce_cli:1.0"
+    container_name: "simple_ecommerce_transaction_service"
+    hostname: "transaction_service"
+    working_dir: /root/
+    stdin_open: true
+    command: ["./cli", "start", "transaction"]
+    restart: on-failure
+    depends_on:
+      - graphql
+    networks:
+      - simple_ecommerce_network
+  order-svc:
+    image: "simple_ecommerce_cli:1.0"
+    container_name: "simple_ecommerce_order_service"
+    hostname: "order_service"
+    working_dir: /root/
+    stdin_open: true
+    command: ["./cli", "start", "order"]
+    restart: on-failure
+    depends_on:
+      - graphql
+    networks:
+      - simple_ecommerce_network
+networks:
+  simple_ecommerce_network:
+    name: "simple_ecommerce_network"
+    driver: bridge

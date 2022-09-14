@@ -1,0 +1,33 @@
+version: "3.5"
+services:
+  rabbitmq:
+    container_name: simple_ecommerce_rabbitmq
+    image: "rabbitmq:3-management"
+    hostname: "rabbitmq-host"
+    restart: "always"
+    environment:
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    labels:
+      NAME: "rabbitmq"
+    networks:
+      - simple_ecommerce_network
+  postgresql:
+    container_name: simple_ecommerce_postgresql
+    image: "postgres:13.7-alpine3.16"
+    hostname: "postgres-host"
+    restart: "always"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "grpc_test"
+    networks:
+      - simple_ecommerce_network
+networks:
+  simple_ecommerce_network:
+    name: "simple_ecommerce_network"
+    driver: bridge
