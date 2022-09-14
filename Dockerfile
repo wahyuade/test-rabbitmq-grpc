@@ -1,6 +1,6 @@
 FROM python:alpine3.16 as db_migrator
 
-RUN apk add --no-cache postgresql-libs python3-dev postgresql-dev gcc musl-dev
+RUN apk add --no-cache postgresql-libs python3-dev postgresql-dev gcc musl-dev g++
 RUN pip install alembic
 RUN pip install psycopg2
 RUN pip install python-dotenv
